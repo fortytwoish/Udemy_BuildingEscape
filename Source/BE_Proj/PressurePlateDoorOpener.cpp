@@ -92,17 +92,7 @@ void UPressurePlateDoorOpener::OpenDoor()
 	{
 		isDoorOpen = true;
 
-		if (door)
-			door->SetActorRotation(FRotator(0.f, startAngle + angle, 0.f));
-
-		if (OpenDoorSound)
-			UGameplayStatics::PlaySound2D(
-				GetWorld(),
-				OpenDoorSound,
-				1.f,
-				1.f,
-				0.f
-			);
+		if (door) OnOpenDoor.Broadcast();
 	}
 }
 
@@ -113,17 +103,7 @@ void UPressurePlateDoorOpener::CloseDoorIfTimeElapsed()
 	{
 		isDoorOpen = false;
 
-		if (door)
-			door->SetActorRotation(FRotator(0.f, startAngle, 0.f));
-		
-		if(CloseDoorSound)
-			UGameplayStatics::PlaySound2D(
-				GetWorld(),
-				CloseDoorSound,
-				1.f,
-				1.f,
-				0.f
-			);
+		if (door) OnCloseDoor.Broadcast();
 	}
 }
 

@@ -8,6 +8,7 @@
 #include "Sound/SoundCue.h"
 #include "PressurePlateDoorOpener.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BE_PROJ_API UPressurePlateDoorOpener : public UActorComponent
@@ -17,6 +18,25 @@ class BE_PROJ_API UPressurePlateDoorOpener : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UPressurePlateDoorOpener();
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnOpenDoor;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnCloseDoor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Door)
+	AActor* door = nullptr;
+
+	//Final angle of the door, relative to its start angle (Y axis)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Door)
+	float angle = -90.0;
+
+	UPROPERTY(BlueprintReadOnly)
+	float startAngle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Door) USoundCue* OpenDoorSound = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Door) USoundCue* CloseDoorSound = nullptr;
 
 protected:
 	// Called when the game starts
@@ -33,15 +53,9 @@ public:
 private:
 
 	/// ------------------------ Door ---------------
-
-	UPROPERTY(EditAnywhere, Category = Door) AActor* door = nullptr;
+	
 	//Time until the door closes when pressure plate no longer triggered
 	UPROPERTY(EditAnywhere, Category = Door) float closeDelay = 1.f;
-	//Final angle of the door, relative to its start angle (Y axis)
-	UPROPERTY(EditAnywhere, Category = Door) float angle = -90.0;
-	UPROPERTY(EditAnywhere, Category = Door) USoundCue* OpenDoorSound = nullptr;
-	UPROPERTY(EditAnywhere, Category = Door) USoundCue* CloseDoorSound = nullptr;
-	float startAngle;
 	float lastDoorOpenTime;
 	float GetTotalWeightInTriggerVolume();
 	bool isDoorOpen = false;
